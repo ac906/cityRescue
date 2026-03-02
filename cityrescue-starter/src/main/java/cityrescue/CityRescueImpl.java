@@ -116,6 +116,7 @@ public class CityRescueImpl implements CityRescue {
             position = i;
             break;
         }
+        }
         // error if the station is not found 
         if (position == 21){
             throw new IDNotRecognisedException("Station doesn't exist");
@@ -130,7 +131,7 @@ public class CityRescueImpl implements CityRescue {
         // now change the station counter and remove the station 
         stationCounter--; // -1 from the station count
         for(int k= position; k< stationCounter; k++){
-            stations[i] = stations[i + 1]; // set station to left equal to one to the right
+            stations[k] = stations[k + 1]; // set station to left equal to one to the right
             // only perfrom this for ones above the one removed (shift them left)
 
             stations[stationCounter] = null; // make the last one null otherwise would 
