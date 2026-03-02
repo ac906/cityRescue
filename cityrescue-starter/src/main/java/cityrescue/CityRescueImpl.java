@@ -90,11 +90,11 @@ public class CityRescueImpl implements CityRescue {
 
         //cover case that inputted coordinates are outside the range of board 
         // cover case that there is no obstacle to remove
-        if (! cityMap.validCoords(x, y) || ! cityMap.isBlocked(x, y)){
-        throw new InvalidLocationException("Tile is out of range or not blocked");
-
-        // set the tile to false 
-    }   cityMap.setBlocked(x, y, false); 
+        if (! cityMap.validCoords(x, y)){
+        throw new InvalidLocationException("Tile is out of range"); 
+        }  
+    // set the tile to false
+    cityMap.setBlocked(x, y, false); 
     }
 
         
