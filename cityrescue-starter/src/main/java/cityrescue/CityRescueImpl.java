@@ -65,8 +65,6 @@ public class CityRescueImpl implements CityRescue {
 
     @Override
     public int[] getGridSize() {
-        if (cityMap == null){ // idk if this is right for this exception
-        throw new UnsupportedOperationException("");}
         return new int[] {cityMap.getWidth(), cityMap.getHeight()};
 
     }
@@ -106,7 +104,7 @@ public class CityRescueImpl implements CityRescue {
     }   if (name == null) {  // covers the case when nothing inputted 
         throw new InvalidNameException("Enter a valid name");     
     }   
-        stations[stationCounter]= new Station(nextStationId, name, x,y);
+        stations[stationCounter]= new Station(StationId, name, x,y);
         stationCounter++;
         StationId++; // returns original ID then adds 1 
     }
@@ -141,85 +139,298 @@ public class CityRescueImpl implements CityRescue {
             //have a duplicate at the end 
         }
     }
-        
     }
 
     @Override
     public void setStationCapacity(int stationId, int maxUnits) throws IDNotRecognisedException, InvalidCapacityException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        Station station = null;
+        for(int i=0; i< stationCounter; i++){
+            if (stations[i].getId() == stationId){
+                station = stations[i]; // store the name of the station as variable station
+                break;
+            }
+            if (station == null){ // case where no station with that ID is found
+                throw new IDNotRecognisedException("Station doesn't exist");
+            }
+            int numOfUnits = 0;
+            for(int k =0; k< unitCounter; k++){
+               if(units[k].getStationID() == stationId){
+                    numOfUnits++;
+               }
+            if (maxUnits < numOfUnits || maxUnits<=0){
+                throw new InvalidCapacityException("input for maximum units is invalid");
+            }
+            station.setCapacity(maxUnits);
+            }
+
+        }
+
+
     }
 
     @Override
     public int[] getStationIds() {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // need an array of the size of station count 
+        int[] stationIds = new int[stationCounter];
+        for (int i=0; i < stationCounter-1; i++){
+            stationIds[i]=stations[i].getId();
+        } 
+        // need a way to sort the array in ascending order 
+        return stationIds;
     }
 
     @Override
     public int addUnit(int stationId, UnitType type) throws IDNotRecognisedException, InvalidUnitException, IllegalStateException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // check if the unit is named 
+        if (type == null){
+            throw new InvalidUnitException("The unit must be named");
+        }
+        // check that the station can be found via its ID 
+        Station station = null;
+        for(int i=0; i< stationCounter; i++){
+            if (stations[i].getId() == stationId){
+                station = stations[i]; // store the name of the station as variable station
+                break;
+            }
+        }
+        if (station == null){
+            throw new IDNotRecognisedException("Station was not found");
+        }
+
+        int numOfUnits = 0; 
+        for (int k = 0; k< unitCounter; k++){
+            if (units[k].getStationID() == stationId){
+                numOfUnits++;
+            }
+        }
+        if (numOfUnits>= station.getCapacity()|| unitCounter >= MAX_UNITS) {
+            throw new IllegalStateException("Station is full");
+        }
+
+        units[unitCounter]= new Unit(nextUnitId, stationId, station.getX(), station.getY(), type, UnitStatus.IDLE);
+        unitCounter++;
+        return nextUnitId++;
     }
+    
 
     @Override
     public void decommissionUnit(int unitId) throws IDNotRecognisedException, IllegalStateException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // check the unit exists
+        int unitPosition = -10; // -ve number to prevent overlap with unitCounter
+        for (int i=0; i < unitCounter; i++){
+            if(units[i].getUnitId() == unitId){
+                unitPosition = i;
+                break;
+            }
+        }
+        if(unitPosition == -10){
+            throw new IDNotRecognisedException("Enter a valid unit ID");
+        }
+        if (units[unitPosition].getUnitStatus() == UnitStatus.EN_ROUTE ||
+            units[unitPosition].getUnitStatus() == UnitStatus.AT_SCENE){
+                throw new IllegalStateException("Unit is busy");
+            }
+        for(int k= unitPosition; k< unitCounter; k++){
+            units[k] = units[k + 1]; // shifts all the units beyond, down 1 place 
+        }
     }
 
     @Override
     public void transferUnit(int unitId, int newStationId) throws IDNotRecognisedException, IllegalStateException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // check that unit and station exist
+        int unitPosition = -10;
+        for(int i = 0; i < unitCounter; i++){
+            if(units[i].getUnitId() == unitId){
+                unitPosition = i;
+                break;
+            }
+        }
+        int stationPosition = -10;
+        for (int k=0; k<stationCounter; k++){
+            if(stations[k].getId() == newStationId){
+                stationPosition = k;
+                break;
+            }
+        }
+        if (unitPosition == -10|| stationPosition == -10){
+            throw new IDNotRecognisedException("Unit/Station was not found");
+        }
+        int unitCountAtStation = 0
+        for(int j = 0;
+                j < stationCounter;j++){ if(stations[j].getId() == newStationId){
+                    unitCountAtStation++;}}
+
+        if(units[unitPosition].getUnitStatus() == UnitStatus.AT_SCENE || 
+            units[unitPosition].getUnitStatus() == UnitStatus.EN_ROUTE ||
+            units[unitPosition].getUnitStatus() == UnitStatus.OUT_OF_SERVICE || 
+            unitCountAtStation >= stations[newStationId].getCapacity()){
+                throw new IllegalStateException("Unit is not IDLE or Station lacks capacity");}
+
+        // now change the unit, so that it has a new station ID
+        // do this using a setter
+        units[unitPosition].setStationID(newStationId); 
+        // get the location of the station and set the unitdestination to that
+        units[unitPosition].setX(stations[stationPosition].getX());
+        units[unitPosition].setY(stations[stationPosition].getY());
     }
 
     @Override
     public void setUnitOutOfService(int unitId, boolean outOfService) throws IDNotRecognisedException, IllegalStateException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+        int unitPosition = -10;
+        for (int i=0; i< unitCounter; i++){
+            if(units[i].getUnitId() == unitId){
+                unitPosition = i;
+                break;
+            }}
+        if(unitPosition == -10){
+            throw new IDNotRecognisedException("Unit doesn't exist");
+        }
+        if(outOfService){
+            if(units[unitPosition].getUnitStatus() == UnitStatus.IDLE){
+                units[unitPosition].setUnitStatus(UnitStatus.OUT_OF_SERVICE);}
+            else{ 
+                throw new IllegalStateException("The unit must be IDLE");}}
+        else{ units[unitPosition].setUnitStatus(UnitStatus.IDLE);}
+        }
 
     @Override
     public int[] getUnitIds() {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        int unitIds[] = new int[unitCounter];
+        for (int i=0; i< unitCounter; i++){
+            unitIds[i] = units[i].getUnitId();
+        }
+        // need to sort them in accessending order too 
+        return unitIds;
     }
 
     @Override
     public String viewUnit(int unitId) throws IDNotRecognisedException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // check the unit exists 
+        int unitPosition = -10;
+        for(int i =0; i < unitPosition; i++){
+            if(units[i].getUnitId() == unitId){
+                unitPosition = i;
+            }}
+        if(unitPosition == -10){
+            throw new IDNotRecognisedException("unitID is not valid");
+        }
+        //now need to create the string in required format
+        return "U#" + units[unitPosition].getUnitId() + " TYPE=" + units[unitPosition].getUnitType()
+                + " HOME=" + units[unitPosition].getStationID() + " LOC=(" + units[unitPosition].getX() + "," 
+                + units[unitPosition].getY() + ")" + " STATUS=" + units[unitPosition].getUnitStatus() +
+                " INCIDENT=" + " WORK="
+                // neeed to finish this method 
     }
 
     @Override
     public int reportIncident(IncidentType type, int severity, int x, int y) throws InvalidSeverityException, InvalidLocationException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // chcek if type is null
+        if (type == null){
+            throw new InvalidSeverityException("Type is not specified");}
+        // check the severity is in bounds 1 to 5
+        if (severity < 1 || severity >5){
+            throw new InvalidSeverityException("Severity is not in bounds");}
+        // check that the location is within the bounds of the gridsize
+        int[] grid = getGridSize();
+        if(grid[0] < x || x<0 || y<0 || grid[1] < y || cityMap.isBlocked(x, y)){
+            throw new InvalidLocationException("location is out of bounds");
+        }
+        // create the incident report, index it using the incident count
+        incidents[incidentCounter] = new Incident(x,y,type,nextIncidentId, severity, IncidentStatus.REPORTED);
+        incidentCounter ++;
+        return nextIncidentId++;
     }
 
     @Override
     public void cancelIncident(int incidentId) throws IDNotRecognisedException, IllegalStateException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+        // first need to check that the incident exists 
+        int incidentPosition = -10;
+        for(int i=0; i < incidentCounter; i++){
+            if(incidents[i].getIncidentId() == incidentId){
+                incidentPosition = i;
+                break;
+            }
+        }
+        if (incidentPosition == -10){
+            throw new IDNotRecognisedException("The incident was not found");
+        }
+        if (incidents[incidentPosition].getIncidentStatus() == IncidentStatus.REPORTED){
+            // in this case can just cancel the report of the incident 
+            incidents[incidentPosition].setStatus(IncidentStatus.CANCELLED);
+        } else if (incidents[incidentPosition].getIncidentStatus() == IncidentStatus.DISPATCHED){
+            //in this case need to realease the unit and cancel the incident
+            // find any units working on or assigned to the incident
+            for (int k=0; k< unitCounter;k++){
+                if(units[k].getIncident() == incidentId){
+                    units[k].setUnitStatus(UnitStatus.IDLE); // change the status to IDLE
+                    units[k].setIncident(-10); // arbritary value that isnt +ve
+                    units[k].setWorkLeft(0); // there will be no work remaining
+                    incidents[incidentPosition].setStatus(IncidentStatus.CANCELLED);
+                    break;
+                }
+            }
+        } else { throw new IllegalStateException("Can't cancel the indident");}
+        }
 
     @Override
     public void escalateIncident(int incidentId, int newSeverity) throws IDNotRecognisedException, InvalidSeverityException, IllegalStateException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        // check that the incident exists 
+        int incidentPosition = -10; // assign a value that can't be obtained 
+        for (int i=0; i< incidentCounter; i++){
+            if(incidents[i].getIncidentId() == incidentId){
+                incidentPosition = i;
+                break;
+            }
+        } 
+        if(incidentPosition == -10){
+            throw new IDNotRecognisedException("The incident was not found");
+        }
+        if(newSeverity < 1 || newSeverity > 5){
+            throw new InvalidSeverityException("The severity is not between valid parameters of 1 and 5");
+        }
+        if (incidents[incidentPosition].getIncidentStatus() == IncidentStatus.CANCELLED||
+            incidents[incidentPosition].getIncidentStatus() == IncidentStatus.RESOLVED){
+            throw new InvalidSeverityException("The incident status means this is not valid");    
+        }
+        incidents[incidentPosition].setSeverity(newSeverity); // change the severity to the new one 
     }
 
     @Override
-    public int[] getIncidentIds() {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+    public int[] getIncidentIds(){
+        int[] incidentIds = new int[incidentCounter];
+        for(int i=0; i<incidentCounter;i++){
+            incidentIds[i]= incidents[i].getIncidentId(); // naturally in asecending order
+        }
+        return incidentIds;
     }
 
     @Override
     public String viewIncident(int incidentId) throws IDNotRecognisedException {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        int incidentPosition = -10;
+        for (int i=0; i< incidentCounter; i++){
+            if(incidents[i].getIncidentId() == incidentId){
+                incidentPosition = i;
+                break;
+            }
+        }
+        if(incidentPosition == -10){
+            throw new IDNotRecognisedException("The Incident ID was not found");
+        }
+        // find the unit assigned
+        int unitAssigned = -10;
+        for (int k=0; k < unitCounter; k++){
+            if(units[k].getIncident() == incidentId){
+                unitAssigned = units[k].getUnitId();
+                break;
+            }
+            }
+
+        return "I#"+ incidents[incidentPosition].getIncidentId() + 
+        " TYPE=" + incidents[incidentPosition].getIncidentType() +
+        " SEV=" + incidents[incidentPosition].getSeverity() + 
+        " LOC=(" + incidents[incidentPosition].getX() + "," + incidents[incidentPosition].getY() + ")"
+        + " STATUS=" + incidents[incidentPosition].getIncidentStatus() + 
+        " UNIT=" + unitAssigned;
     }
 
     @Override
