@@ -110,7 +110,7 @@ public class CityRescueImpl implements CityRescue {
     @Override
     public void removeStation(int stationId) 
     throws IDNotRecognisedException, IllegalStateException{
-        int position = 21;
+        int position = -10;
         for (int i = 0; i < stationCounter; i++) {
             if (stations[i].getId() == stationId) {
             position = i;
@@ -137,7 +137,6 @@ public class CityRescueImpl implements CityRescue {
             stations[stationCounter] = null; // make the last one null otherwise would 
             //have a duplicate at the end 
         }
-    }
     }
 
     @Override
