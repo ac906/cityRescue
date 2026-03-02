@@ -33,9 +33,9 @@ public class CityRescueImpl implements CityRescue {
     private Incident[] incidents;
 
     //need stuff to count the ID
-    private int StationId = 1;
-    private int nextIncidentId = 1;
-    private int nextUnitId = 1;
+    private int nextStationId;
+    private int nextIncidentId;
+    private int nextUnitId;
 
 
     @Override
@@ -61,6 +61,10 @@ public class CityRescueImpl implements CityRescue {
         units = new Unit[MAX_UNITS];
         incidents = new Incident[MAX_INCIDENTS];
 
+        //set the next ids = 1 
+        nextIncidentId =1;
+        nextStationId =1;
+        nextUnitId =1;
     }
 
     @Override
@@ -74,13 +78,11 @@ public class CityRescueImpl implements CityRescue {
 
         //cover case that inputted coordinates are outside the range of board 
         // cover case that there is no obstacle to remove
-        if (! cityMap.validCoords(x, y)|| cityMap.isBlocked(x, y)){
+        if (!cityMap.validCoords(x, y)){
         throw new InvalidLocationException("Tile is out of range");
     }   
-
         // set the tile to true  
         cityMap.setBlocked(x, y, true); 
-
     }
 
     @Override
