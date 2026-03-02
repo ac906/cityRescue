@@ -2,8 +2,6 @@ package cityrescue;
 
 import java.nio.channels.UnsupportedAddressTypeException;
 
-import javax.naming.InvalidNameException;
-
 import cityrescue.enums.*;
 import cityrescue.exceptions.*;
 
@@ -97,13 +95,11 @@ public class CityRescueImpl implements CityRescue {
     cityMap.setBlocked(x, y, false); 
     }
 
-        
-
     @Override
-    public void addStation(String name, int x, int y) throws InvalidNameException, InvalidLocationException {
+    public int addStation(String name, int x, int y) throws InvalidNameException, InvalidLocationException {
         if (! cityMap.validCoords(x, y) || cityMap.isBlocked(x, y)){
         throw new InvalidLocationException("Tile is out of range or blocked");
-    }   if (name == null) {  // covers the case when nothing inputted 
+    }   if (name == null) {  // covers the case when it's blank  
         throw new InvalidNameException("Enter a valid name");     
     }   
         stations[stationCounter]= new Station(StationId, name, x,y);
