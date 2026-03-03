@@ -4,15 +4,15 @@ import cityrescue.enums.IncidentType;
 import cityrescue.enums.UnitStatus;
 import cityrescue.enums.UnitType;
 
-public class Unit {
-    private int id; 
-    private int stationId;
-    private int x;
-    private int y;
-    private UnitType type;
-    private UnitStatus status;
-    private int incidentId;
-    private int workLeft; 
+public abstract class Unit { //class has to be abstract so units must be created in subclasses 
+    protected int id;  // protected allows subclasses (ambulance/fireengine/policecar) to access but maintains encapsulation
+    protected int stationId;
+    protected int x;
+    protected int y;
+    protected UnitType type;
+    protected UnitStatus status;
+    protected int incidentId;
+    protected int workLeft; 
 
     public int getStationID(){
         return stationId;
