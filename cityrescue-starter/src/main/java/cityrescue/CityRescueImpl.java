@@ -203,12 +203,27 @@ public class CityRescueImpl implements CityRescue {
         if (numOfUnits>= station.getCapacity()|| unitCounter >= MAX_UNITS) {
             throw new IllegalStateException("Station is full");
         }
-
-        units[unitCounter]= new Unit(nextUnitId, stationId, station.getX(), station.getY(), type, UnitStatus.IDLE);
+        // there are 3 subclasses since Unit is an abstract class so no units 
+        // are created using it, therfore need to check for type to instantiate 
+        // a new unit
+        Unit newUnit; // new unit data type and variable name 
+        switch(type){
+            case AMBULANCE:
+                newUnit = new Ambulance(nextUnitId, stationId, station.getX(), station.getY());
+                break;
+            case FIRE_ENGINE:
+                newUnit = new FireEngine(nextUnitId, stationId, station.getX(), station.getY());
+                break;
+            case POLICE_CAR:
+                newUnit = new PoliceCar(nextUnitId, stationId, station.getX(), station.getY());
+                break;
+            default:
+                throw new InvalidUnitException("Type of unit inputted is not valud");
+        }
+        units[unitCounter] = newUnit; // adding the unit to the units list 
         unitCounter++;
         return nextUnitId++;
     }
-    
 
     @Override
     public void decommissionUnit(int unitId) throws IDNotRecognisedException, IllegalStateException {
