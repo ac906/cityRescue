@@ -378,7 +378,7 @@ public class CityRescueImpl implements CityRescue {
                     units[k].setIncident(-10); // arbritary value that isnt +ve
                     units[k].setWorkLeft(0); // there will be no work remaining
                     incidents[incidentPosition].setStatus(IncidentStatus.CANCELLED);
-                    break;
+                    // runs until all units assigned to incident are cancelled
                 }
             }
         } else { throw new IllegalStateException("Can't cancel the indident");}
