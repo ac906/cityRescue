@@ -161,7 +161,7 @@ public class CityRescueImpl implements CityRescue {
                 throw new InvalidCapacityException("input for maximum units is invalid");
             }
             station.setCapacity(maxUnits);
-            }
+        }
 
 
     @Override
@@ -171,7 +171,8 @@ public class CityRescueImpl implements CityRescue {
         for (int i=0; i < stationCounter-1; i++){
             stationIds[i]=stations[i].getId();
         } 
-        // need a way to sort the array in ascending order 
+        // this list is natually in acsending order because stations added are always added 
+        // to the end of the list and removing stations just shifts left  
         return stationIds;
     }
 
