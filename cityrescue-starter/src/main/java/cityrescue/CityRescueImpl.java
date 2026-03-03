@@ -267,15 +267,16 @@ public class CityRescueImpl implements CityRescue {
         if (unitPosition == -10|| stationPosition == -10){
             throw new IDNotRecognisedException("Unit/Station was not found");
         }
-        int unitCountAtStation = 0
+        int unitCountAtStation = 0;
         for(int j = 0;
-                j < stationCounter;j++){ if(stations[j].getId() == newStationId){
+                j < stationCounter;j++){ 
+                    if(units[j].getStationID() == newStationId){
                     unitCountAtStation++;}}
 
         if(units[unitPosition].getUnitStatus() == UnitStatus.AT_SCENE || 
             units[unitPosition].getUnitStatus() == UnitStatus.EN_ROUTE ||
             units[unitPosition].getUnitStatus() == UnitStatus.OUT_OF_SERVICE || 
-            unitCountAtStation >= stations[newStationId].getCapacity()){
+            unitCountAtStation >= stations[stationPosition].getCapacity()){
                 throw new IllegalStateException("Unit is not IDLE or Station lacks capacity");}
 
         // now change the unit, so that it has a new station ID
