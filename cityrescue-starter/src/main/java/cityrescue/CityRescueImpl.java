@@ -344,7 +344,7 @@ public class CityRescueImpl implements CityRescue {
             throw new InvalidSeverityException("Severity is not in bounds");}
         // check that the location is within the bounds of the gridsize
         int[] grid = getGridSize();
-        if(grid[0] < x || x<0 || y<0 || grid[1] < y || cityMap.isBlocked(x, y)){
+        if(grid[0] >= x || x<0 || y<0 || grid[1] >= y || cityMap.isBlocked(x, y)){
             throw new InvalidLocationException("location is out of bounds");
         }
         // create the incident report, index it using the incident count
