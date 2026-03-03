@@ -118,7 +118,7 @@ public class CityRescueImpl implements CityRescue {
         }
         }
         // error if the station is not found 
-        if (position == 21){
+        if (position == -10){
             throw new IDNotRecognisedException("Station doesn't exist");
         }
         // error if the station has no units 
@@ -147,6 +147,7 @@ public class CityRescueImpl implements CityRescue {
                 station = stations[i]; // store the name of the station as variable station
                 break;
             }
+        }
             if (station == null){ // case where no station with that ID is found
                 throw new IDNotRecognisedException("Station doesn't exist");
             }
@@ -155,16 +156,13 @@ public class CityRescueImpl implements CityRescue {
                if(units[k].getStationID() == stationId){
                     numOfUnits++;
                }
+            }
             if (maxUnits < numOfUnits || maxUnits<=0){
                 throw new InvalidCapacityException("input for maximum units is invalid");
             }
             station.setCapacity(maxUnits);
             }
 
-        }
-
-
-    }
 
     @Override
     public int[] getStationIds() {
