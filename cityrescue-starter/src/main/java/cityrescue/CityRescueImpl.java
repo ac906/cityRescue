@@ -308,11 +308,11 @@ public class CityRescueImpl implements CityRescue {
 
     @Override
     public int[] getUnitIds() {
-        int unitIds[] = new int[unitCounter];
+        int unitIds[] = new int[unitCounter]; // set up a list with as many positions as unit count
         for (int i=0; i< unitCounter; i++){
             unitIds[i] = units[i].getUnitId();
         }
-        // need to sort them in accessending order too 
+        // naturally they are in accendung order, as a new unit is added to the end of the list
         return unitIds;
     }
 
@@ -320,7 +320,7 @@ public class CityRescueImpl implements CityRescue {
     public String viewUnit(int unitId) throws IDNotRecognisedException {
         // check the unit exists 
         int unitPosition = -10;
-        for(int i =0; i < unitPosition; i++){
+        for(int i =0; i < unitCounter; i++){
             if(units[i].getUnitId() == unitId){
                 unitPosition = i;
             }}
@@ -331,8 +331,7 @@ public class CityRescueImpl implements CityRescue {
         return "U#" + units[unitPosition].getUnitId() + " TYPE=" + units[unitPosition].getUnitType()
                 + " HOME=" + units[unitPosition].getStationID() + " LOC=(" + units[unitPosition].getX() + "," 
                 + units[unitPosition].getY() + ")" + " STATUS=" + units[unitPosition].getUnitStatus() +
-                " INCIDENT=" + " WORK="
-                // neeed to finish this method 
+                " INCIDENT=" + units[unitPosition].getIncident() + " WORK=" + units[unitPosition].getWork();
     }
 
     @Override
