@@ -39,6 +39,11 @@ public class CityRescueImpl implements CityRescue {
 
 
     @Override
+    /** Initialise takes an inputted width and height and 
+     * ensures they are greater than 0, initialises the grid by
+     * calling the Citymap constructor, then also set the begining
+     * state for tick, counts, arrays with right space and IDs 
+     */
     public void initialise(int width, int height) throws InvalidGridException {
         // gives an error when invalid grid size (as too small to create initial grid)
         if (width <= 0 || height <= 0){
@@ -69,6 +74,10 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** Uses the object created in Initialise method 
+     * and then uses getter methods to return the width and 
+     * hieght and put them in list form
+     */
     public int[] getGridSize() {
         return new int[] {cityMap.getWidth(), cityMap.getHeight()};
 
