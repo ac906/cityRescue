@@ -4,15 +4,16 @@ import cityrescue.enums.IncidentType;
 import cityrescue.enums.UnitStatus;
 import cityrescue.enums.UnitType;
 
-public abstract class Unit { //class has to be abstract so units must be created in subclasses 
-    protected int id;  // protected allows subclasses (ambulance/fireengine/policecar) to access but maintains encapsulation
-    protected int stationId;
-    protected int x;
-    protected int y;
-    protected UnitType type;
-    protected UnitStatus status;
-    protected int incidentId;
-    protected int workLeft; 
+public abstract class Unit {
+    private int id; 
+    private int stationId;
+    private int x;
+    private int y;
+    private UnitType type;
+    private UnitStatus status;
+    private int incidentId;
+    private int workLeft; 
+    private int ticksUntilDone;
 
     public int getStationID(){
         return stationId;
@@ -77,6 +78,16 @@ public abstract class Unit { //class has to be abstract so units must be created
 
     public void setWorkLeft(int workLeft){
         this.workLeft = workLeft;
+    }
+
+    public abstract boolean incidentsResolve(IncidentType type);
+
+    public void setTicksUntilDone(int ticksUntilDone){
+        this.ticksUntilDone = ticksUntilDone;
+    }
+
+    public int getTicksUntilDone(){
+        return ticksUntilDone;
     }
 
 }
