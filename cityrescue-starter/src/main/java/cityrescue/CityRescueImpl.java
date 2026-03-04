@@ -84,6 +84,10 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /**This method checks if the coodinates are valid, using the 
+     * information stored in the citymap class, and then blocks 
+     * coordinates if they are blockable
+      */
     public void addObstacle(int x, int y) throws InvalidLocationException {
 
         //cover case that inputted coordinates are outside the range of board 
@@ -96,6 +100,10 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /**This method checks that the coordinates are valid, 
+     * checking through the method of valid coordinates and then 
+     * setting that tile to blocked through setBlocked method
+     */
     public void removeObstacle(int x, int y) throws InvalidLocationException {
 
         //cover case that inputted coordinates are outside the range of board 
@@ -109,6 +117,13 @@ public class CityRescueImpl implements CityRescue {
 
         
     @Override
+    /**This method adds a station checking for if the tile is blocked 
+     * or if the coordinates are not valid, through calling methods in
+     * the cityMap class, and then checking the name is not null
+     * if these are passed the constructor to create a station is called 
+     * and added to that position in the station list, and retunrs 
+     * the next stationID
+     */
     public int addStation(String name, int x, int y) throws InvalidNameException, InvalidLocationException {
         if (! cityMap.validCoords(x, y) || cityMap.isBlocked(x, y)){
         throw new InvalidLocationException("Tile is out of range or blocked");
@@ -121,9 +136,14 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /**This method removes a station, first checks it exists by
+     * looping through all stations and checking ID. Then check 
+     * it has no units otherwise can't be removed. If neither 
+     * exception is triggered, then remove the station
+     */
     public void removeStation(int stationId) 
     throws IDNotRecognisedException, IllegalStateException{
-        int position = 21;
+        int position = -10;
         for (int i = 0; i < stationCounter; i++) {
             if (stations[i].getId() == stationId) {
             position = i;
@@ -131,7 +151,7 @@ public class CityRescueImpl implements CityRescue {
         }
         }
         // error if the station is not found 
-        if (position == 21){
+        if (position == -10){
             throw new IDNotRecognisedException("Station doesn't exist");
         }
         // error if the station has no units 
