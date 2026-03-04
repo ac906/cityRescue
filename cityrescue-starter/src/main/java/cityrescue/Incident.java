@@ -10,7 +10,8 @@ public class Incident {
     private int severity;
     private int id;
     private IncidentStatus status;
-
+// i realised in the video i forgot to mention constructors inside the class files
+    // which are just here and allow objects to be made in main methods 
 public Incident (int x, int y, IncidentType type, int id, int severity, IncidentStatus status){
     this.x = x;
     this.y = y;

@@ -7,6 +7,8 @@ public class Station {
     private String name; 
     private int capacity;
 
+    // i realised in the video i forgot to mention constructors inside the class files
+    // which are just here and allow objects to be made in the main methods
     public Station(int id, String name, int x, int y){
         this.id = id;
         this.name = name;

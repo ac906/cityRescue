@@ -4,7 +4,7 @@ import cityrescue.enums.IncidentType;
 import cityrescue.enums.UnitStatus;
 import cityrescue.enums.UnitType;
 
-public abstract class Unit {
+public abstract class Unit { 
     private int id; 
     private int stationId;
     private int x;
@@ -19,7 +19,8 @@ public abstract class Unit {
         return stationId;
     }
    
-
+    // i realised in the video i forgot to mention constructors inside the class files
+    // which are just here 
     public Unit(int id, int stationId, int x, int y, UnitType type, UnitStatus status){
         this.id = id;
         this.stationId = stationId;
