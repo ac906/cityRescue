@@ -468,6 +468,11 @@ public class CityRescueImpl implements CityRescue {
         }
 
     @Override
+    /** this method changes the severity of an incdient, has to check 
+     * the incdeint exists and that it isnt cancelled or resolved, also that 
+     * the severity is within reasonable bounds 1-5. Then if all this is true 
+     * alter the severity via the method setSeverity in incidents class
+     */
     public void escalateIncident(int incidentId, int newSeverity) throws IDNotRecognisedException, InvalidSeverityException, IllegalStateException {
         // check that the incident exists 
         int incidentPosition = -10; // assign a value that can't be obtained 
@@ -491,6 +496,11 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** This method returns the incident IDs in accessending oreder 
+     * just loops through the incidents and then adds them to an array 
+     * effectivley just removes the end null values in the whole incidents
+     * array
+     */
     public int[] getIncidentIds(){
         int[] incidentIds = new int[incidentCounter];
         for(int i=0; i<incidentCounter;i++){
@@ -500,6 +510,12 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** This method retuns information about an incdient, first 
+     * check that the incident exists, then through .get methods
+     * that exist in the incident class the information is returned.
+     * also gets the assigned unit by matching a unit incident ID to 
+     * the incident ID
+     */
     public String viewIncident(int incidentId) throws IDNotRecognisedException {
         int incidentPosition = -10;
         for (int i=0; i< incidentCounter; i++){
@@ -529,6 +545,12 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** This method dispatches units to incidents by finding the 
+     * closest eligeble unit to an incident. It avoids ties by 
+     * lowest unit ID then lowest station ID. Once a unit is dispacted 
+     * its status us set to en route and the incident status is set ti 
+     * dispatched 
+     */
     public void dispatch() {
         // find the incidents that are reported 
         // the incident array is already in ascending order 
@@ -573,6 +595,14 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** This method runs a tick. Units en route are mogved towards incidents
+     * by shortest manhattan distance going for N E S W order. If there 
+     * was no valid move then just make a move in the oredr N E S W
+     * irrespective of distance when the unit reaches 
+     * the incident it is set to at scene and the incident set to in progress
+     * For units already at incident they get 1 work each tick until complete, at which 
+     * point the incident is resolved and the unit goes back to IDLE.
+      */
     public void tick() {
         tick++;
         // need to move the units EN_ROUTE
@@ -704,6 +734,11 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /**Just shows the state of all units, incidents and stations
+     * at a certain tick, so can run at anytime to see the state 
+     * of the city, gives info on stuff like unit location, work, 
+     * status and incidents assigned units 
+     */
     public String getStatus() {
         // get the tick first then 
         String status = "TICK=" + tick + "\n";
