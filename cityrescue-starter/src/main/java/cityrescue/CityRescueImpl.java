@@ -173,6 +173,11 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /**This method sets the capacity of a station, first chcecking it 
+     * exists, then finding the number of units at that station and 
+     * using the method setCapacity given that the station contains 
+     * less units than what you try to set as max
+     */
     public void setStationCapacity(int stationId, int maxUnits) throws IDNotRecognisedException, InvalidCapacityException {
         Station station = null;
         for(int i=0; i< stationCounter; i++){
@@ -200,6 +205,10 @@ public class CityRescueImpl implements CityRescue {
 
 
     @Override
+    /** This method creates an array that is the size of the number 
+     * of stations, then loop through all stations and add them to 
+     * the array, they are naturally in accesdning id order
+      */
     public int[] getStationIds() {
         // need an array of the size of station count 
         int[] stationIds = new int[stationCounter];
@@ -211,6 +220,11 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /**This method adds a unit and assigns it a station ID so need to
+     * check unit type and stationID exist then ensure the station is not
+     * full by calling capacity method then use a switch statement, based
+     * on unitype inpitted, which calls the appropriate constructors
+      */
     public int addUnit(int stationId, UnitType type) throws IDNotRecognisedException, InvalidUnitException, IllegalStateException {
         // check if the unit is named 
         if (type == null){
