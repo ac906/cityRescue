@@ -386,7 +386,10 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
-    
+    /** This just gives info on the unit by using a for loop to get the 
+     * unit position in the units array ahd then uses the methods that exist
+     * in the unit class to get the information needed to be returned
+     */
     public String viewUnit(int unitId) throws IDNotRecognisedException {
         // check the unit exists 
         int unitPosition = -10;
@@ -405,6 +408,11 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** This method reports an incident, first has to chek the type is valid along with 
+     * the severity and grid point, then creates a new incident indexed 
+     * at the position of the incidentxCounter on the incidents
+     * array, and call the constructor to create a new incident
+     */
     public int reportIncident(IncidentType type, int severity, int x, int y) throws InvalidSeverityException, InvalidLocationException {
         // chcek if type is null
         if (type == null){
@@ -424,6 +432,12 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** Method for canceling an incident, the incident must exist,
+     * then check the status and act differently according to the 
+     * incident status, as can only canacel if unit is dispatched or 
+     * only had a reported incident, use the methods in unit class
+     * and incident class to alter their values and cancel incident 
+      */
     public void cancelIncident(int incidentId) throws IDNotRecognisedException, IllegalStateException {
         // first need to check that the incident exists 
         int incidentPosition = -10;
