@@ -275,6 +275,12 @@ public class CityRescueImpl implements CityRescue {
     
 
     @Override
+    /** This removes a unit, have to check the unit exists and 
+     * is in a valid state (not busy dealing with an incidentw)
+     * then can take unit away and alter the units array, shifting 
+     * all units with a higher id down one position and don't
+     * return anythijng since void method
+     */
     public void decommissionUnit(int unitId) throws IDNotRecognisedException, IllegalStateException {
         // check the unit exists
         int unitPosition = -10; // -ve number to prevent overlap with unitCounter
@@ -299,6 +305,11 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** Method that chnages the stationID a unit is assigned to
+     * checks for errors in ecistance and then in teh unit status, if these 
+     * don't throw then alter station ID and make the unit location 
+     * that of the station 
+     */
     public void transferUnit(int unitId, int newStationId) throws IDNotRecognisedException, IllegalStateException {
         // check that unit and station exist
         int unitPosition = -10;
@@ -337,6 +348,10 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    /** This method sets a unit to be out of service, but need to 
+     * cehck that the unit exists and that it has a valid status 
+     * (the unit must be IDLE not doing anything)
+     */
     public void setUnitOutOfService(int unitId, boolean outOfService) throws IDNotRecognisedException, IllegalStateException {
         int unitPosition = -10;
         for (int i=0; i< unitCounter; i++){
@@ -356,6 +371,11 @@ public class CityRescueImpl implements CityRescue {
         }
 
     @Override
+    /** This method just returns an array with all the Unit ids 
+     * does it in asscedning order through a for loop since 
+     * units already has IDs in the correct order, so just loop 
+     * and cut of the end of the array which contains null values
+     */
     public int[] getUnitIds() {
         int unitIds[] = new int[unitCounter];
         for (int i=0; i< unitCounter; i++){
@@ -366,6 +386,7 @@ public class CityRescueImpl implements CityRescue {
     }
 
     @Override
+    
     public String viewUnit(int unitId) throws IDNotRecognisedException {
         // check the unit exists 
         int unitPosition = -10;
